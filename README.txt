@@ -24,11 +24,17 @@ GeoHexの概要 (http://geogames.net/)
   AS3以外の実装として、JavaScript/Perl/Rubyが存在します。
 
 
+使い方
 
+<<<<<<< HEAD
 使い方
 
 ・net/geogames 以下に、GeoHex.asをコピー。 *「import net.geogames.GeoHex」 を記述。 
 
+=======
+・net/geogames 以下に、GeoHex.asをコピー。 *「import net.geogames.GeoHex」 を記述。 
+
+>>>>>>> de8798704addc392ffb38dbc8d16bece17914709
 ・以下は、緯度経度をGeoHexコードに変換するコード 
 
 	
