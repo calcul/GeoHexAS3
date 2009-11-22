@@ -4,43 +4,43 @@ http://blog.goo.ne.jp/calcul/
 http://twitter.com/calcul_omikan
 
 
-GeoHex �N���X
+GeoHex クラス
 
-�EGeoHexAS3��Action Script3.0��œ��{����̎Ό`���W�n��񋟂���N���X�ł��B
-�EGeoHexAS3�͈ܓx�o�x�Ɣ͈̓��x������GeoHex�R�[�h�̐����AGeoHex�R�[�h����ܓx�o�x�E���x���̑��ݕϊ����\�ł��B
-�EGeoHex�R�[�h�ϊ��̑��A���[�e�B���e�B�[�֐��A�v���p�e�B��񋟂��܂��B
-
-
-GeoHex�̊T�v (http://geogames.net/)
-
-   1. ���{�������Ԃ̖����Z�p�`�|���S���i�w�b�N�X�j�ŕ~���l�߂܂��B�w�b�N�X�Ɋ܂܂��ܓx�o�x���A�w�b�N�X�̃T�C�Y�i�U�O�i�K�j�ɂ��S0�V���̒Z���R�[�h�ɕϊ����܂��B
-   2. �ܓx�o�x���璼�ڕϊ����s�����߁A���W�b�N�P�̂ŕϊ����\�ł��B
-   3. ��`���b�V���ƈقȂ�A�}�X�ڊԂ̋������قړ������Ȃ�܂��B�i�ܓx�ɂ���k�����̒����͑����قȂ�܂����A���p�͈͓��B�j
-   4. ���̐��x���������߁A�v���C�o�V�[�̕ی�Ɍ����Ă��܂��B
-   5. �אڂ���w�b�N�X���U�����ŕ\���邽�߁A�A�������O�Ղ��w�b�N�X�R�[�h�{[1-6]*n�ŕ\�����Ƃ��\�ł��B
+・GeoHexAS3はAction Script3.0上で日本限定の斜形座標系を提供するクラスです。
+・GeoHexAS3は緯度経度と範囲レベルからGeoHexコードの生成、GeoHexコードから緯度経度・レベルの相互変換が可能です。
+・GeoHexコード変換の他、ユーティリティー関数、プロパティを提供します。
 
 
-  �����҂�sa2da (http://geogames.net/)�ł��B
-  AS3�ȊO�̎����Ƃ��āAJavaScript/Perl/Ruby�����݂��܂��B
+GeoHexの概要 (http://geogames.net/)
+
+   1. 日本中を隙間の無い六角形ポリゴン（ヘックス）で敷き詰めます。ヘックスに含まれる緯度経度を、ヘックスのサイズ（６０段階）により４0７桁の短いコードに変換します。
+   2. 緯度経度から直接変換を行うため、ロジック単体で変換が可能です。
+   3. 矩形メッシュと異なり、マス目間の距離がほぼ等しくなります。（緯度により南北方向の長さは多少異なりますが、実用範囲内。）
+   4. 一定の精度幅を持つため、プライバシーの保護に向いています。
+   5. 隣接するヘックスを６方向で表せるため、連続した軌跡をヘックスコード＋[1-6]*nで表すことが可能です。
+
+
+  発明者はsa2da (http://geogames.net/)です。
+  AS3以外の実装として、JavaScript/Perl/Rubyが存在します。
 
 
 
-�g����
+使い方
 
-�Enet/geogames �ȉ��ɁAGeoHex.as���R�s�[�B *�uimport net.geogames.GeoHex�v ���L�q�B 
+・net/geogames 以下に、GeoHex.asをコピー。 *「import net.geogames.GeoHex」 を記述。 
 
-�E�ȉ��́A�ܓx�o�x��GeoHex�R�[�h�ɕϊ�����R�[�h 
+・以下は、緯度経度をGeoHexコードに変換するコード 
 
 	
 	var GeoHexCode:String;
 	var zone:GeoHex = new GeoHex();	// import net.geogames.GeoHex;
 	
-	GeoHexCode = zone.latlng2geohex(35,135,7);	//�ܓx,�o�x,���x���̏�
+	GeoHexCode = zone.latlng2geohex(35,135,7);	//緯度,経度,レベルの順
 	
-	trace(GeoHexCode);	//�o��: rnvs
+	trace(GeoHexCode);	//出力: rnvs
 
 
-�E�ׂ������t�@�����X�́AASDOC���Q�Ƃ��Ă��������B
+・細かいリファレンスは、ASDOCを参照してください。
 	ASDOC http://github.com/geohexas3/asdoc/
 
 
