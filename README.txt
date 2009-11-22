@@ -13,41 +13,31 @@ GeoHex クラス
 
 GeoHexの概要 (http://geogames.net/)
 
-   1. 日本中を隙間の無い六角形ポリゴン（ヘックス）で敷き詰めます。ヘックスに含まれる緯度経度を、ヘックスのサイズ（６０段階）により４0７桁の短いコードに変換します。
+   1. 日本中を隙間の無い六角形ポリゴン（ヘックス）で敷き詰めます。ヘックスに含まれる緯度経度を、ヘックスのサイズ（６０段階）により4～7桁の短いコードに変換します。
    2. 緯度経度から直接変換を行うため、ロジック単体で変換が可能です。
    3. 矩形メッシュと異なり、マス目間の距離がほぼ等しくなります。（緯度により南北方向の長さは多少異なりますが、実用範囲内。）
    4. 一定の精度幅を持つため、プライバシーの保護に向いています。
    5. 隣接するヘックスを６方向で表せるため、連続した軌跡をヘックスコード＋[1-6]*nで表すことが可能です。
 
 
-  発明者はsa2da (http://geogames.net/)です。
+  発明者はsa2da ( http://geogames.net/ )
   AS3以外の実装として、JavaScript/Perl/Rubyが存在します。
 
 
 使い方
 
-<<<<<<< HEAD
-使い方
+・net/geogames 以下に、GeoHex.asをコピー。 import net.geogames.GeoHex を記述。 
 
-・net/geogames 以下に、GeoHex.asをコピー。 *「import net.geogames.GeoHex」 を記述。 
+・リファレンスはアーカイブ中のASDOC/index.htmlに用意してあります。
 
-=======
-・net/geogames 以下に、GeoHex.asをコピー。 *「import net.geogames.GeoHex」 を記述。 
-
->>>>>>> de8798704addc392ffb38dbc8d16bece17914709
 ・以下は、緯度経度をGeoHexコードに変換するコード 
 
-	
 	var GeoHexCode:String;
 	var zone:GeoHex = new GeoHex();	// import net.geogames.GeoHex;
 	
 	GeoHexCode = zone.latlng2geohex(35,135,7);	//緯度,経度,レベルの順
 	
 	trace(GeoHexCode);	//出力: rnvs
-
-
-・細かいリファレンスは、ASDOCを参照してください。
-	ASDOC http://github.com/geohexas3/asdoc/
 
 
 
