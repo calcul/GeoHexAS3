@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:as3unit="org.libspark.as3unit.components.*"
+	xmlns:UnitTest="UnitTest.*"
+	layout="absolute"
+	creationComplete="creationCompleteHandler()">
+	
+	<UnitTest:GeoHexTest>
+		
+	</UnitTest:GeoHexTest>
+	
+		
+	<mx:Script>
+		<![CDATA[
+			
+		import org.libspark.as3unit.test;
+    	import org.libspark.as3unit.assert.assertEquals;	
+   		import org.libspark.as3unit.runner.AS3UnitCore;
+		import flash.display.Sprite;
+	
+		use namespace test;
+
+		private function creationCompleteHandler():void
+        {  
+        	 as3unit.run(GeoHexTest);
+        }
+
+		]]>
+	</mx:Script>
+	
+	<as3unit:AS3Unit id="as3unit"/>
+</mx:Application>

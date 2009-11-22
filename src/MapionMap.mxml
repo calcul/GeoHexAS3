@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application
+    xmlns:mx="http://www.adobe.com/2006/mxml"
+    xmlns:mapion="http://www.mapion.co.jp/mmap/flex" viewSourceURL="srcview/index.html">
+
+    <mx:Panel title="sample of Flash Map API"
+        width="100%" height="100%">
+        <mapion:FlexMapionMap
+            width="100%" height="100%"
+            id="map"
+            mode="labs" 
+            key="d3d3Lms1LmRpb24ubmUuanAvfmt1bHVrdWx1L2ZsYXNobWFwYXBpX3Bvd2VyZWRieW1hcGlvbgee"
+            latitude="35.68" longitude="139.75"
+            zoomLevel="6"
+            wheelZoomChangeEnable="true"
+            map_click="map_click(event)"
+            
+            >
+ 
+            <mapion:controls>
+                <mapion:MSliderControl
+                	offsetX="10" offsetY="10"
+      				anchor="{MControlPosition.M_ANCHOR_TOP_LEFT}" />
+                <mapion:MScaleControl
+                	offsetX="10" offsetY="10"
+    				anchor="{MControlPosition.M_ANCHOR_TOP_RIGHT}" />
+        	</mapion:controls>
+        	
+		</mapion:FlexMapionMap>
+
+    </mx:Panel>
+    
+    
+    <mx:Script>
+    	<![CDATA[
+	    	import jp.co.mapion.mmap.MapionMap;  
+			import jp.co.mapion.mmap.control.MControlPosition;
+	    	import jp.co.mapion.mmap.event.MMapEvent;
+	    	import jp.co.mapion.mmap.overlay.flex.vectorimage.MPolyline;
+	    	import jp.co.mapion.mmap.overlay.flex.vectorimage.MFillPolygon;
+	    	
+	    	import jp.co.mapion.mmap.overlay.flex.marker.MMarker;
+	    	import jp.co.mapion.mmap.adapter.AdapterUtil;
+	    	
+	    	//GeoHexを使うにはこれをimportしてね
+			import net.geogames.GeoHex;
+		
+	    	private var zone:GeoHex = new GeoHex();
+			private var h_stamp:Object = new Object();
+			
+			
+            private function map_click(e:MMapEvent):void
+            {	
+				///Mapionマップ・マウスイベントで取得される系は日本測地系
+				var w_point:Point = AdapterUtil.j2w(e.mouseRP);
+
+				//GeoHex計算はWSG86
+				var center:Object = zone.latlng2center(w_point.y,w_point.x,7);
+				zone.level = center["level"];
+				zone.code  = center["code"];
+				
+				//Mapionマップに描くための系は日本測地系
+				var j_point:Point = w2j(center["lat"],center["lng"]);
+				zone.lat = j_point.y;
+				zone.lng = j_point.x;
+                drawHex(zone ,0xFF0000,0xFF8a00,1);    
+                
+                //polygonイベントに反応しないため、ここで表示....
+                //ウインドウ表示は日本測地系が必要
+                map.openInfoWindowHTML(zone.code,j_point);
+            }
+            
+            
+            
+            public function drawHex(l_zone:GeoHex,linecolor:uint,fillcolor:uint,popinfo:Object):void{
+            	
+            	if(h_stamp[l_zone.code] != 1){
+	            	var dummy_point:Array= [
+		            {
+		                 x:139.74
+		                ,y:35.68
+		            }];
+		
+			 		var polygon:MFillPolygon = new MFillPolygon();
+					polygon.color     = linecolor;
+					polygon.weight    = 0;
+					polygon.opacity   = 0.9;
+					polygon.fillColor = fillcolor;
+					
+					polygon.points = dummy_point;
+					polygon.points.length = 0;
+			        
+			        var polyArray:Array = zone.latlng2polygon(l_zone.lat,l_zone.lng,l_zone.level);
+			        polygon.points.push(new Point(polyArray[0].x,polyArray[0].y));
+			        polygon.points.push(new Point(polyArray[1].x,polyArray[1].y));
+			        polygon.points.push(new Point(polyArray[2].x,polyArray[2].y));
+			        polygon.points.push(new Point(polyArray[3].x,polyArray[3].y));
+			        polygon.points.push(new Point(polyArray[4].x,polyArray[4].y));
+			        polygon.points.push(new Point(polyArray[5].x,polyArray[5].y));
+			        polygon.points.push(new Point(polyArray[6].x,polyArray[6].y));
+			        map.addOverlay(polygon);
+	            	
+	            	
+	            	if(popinfo){
+			            var myHtml:String = "<br />[ZONE] <a href='./?code="+l_zone.code+"'>"+l_zone.code+"</a>";
+			            
+			            //動作しない
+			            polygon.addEventListener(MMapEvent.CLICK, function(e:MMapEvent):void {
+			            	//e.clickedOverlay.openInfoWindowHTML(myHtml);
+				        });
+				        //trace("登録");
+			        }
+			        
+            		h_stamp[l_zone.code] = 1; 
+		    	}
+			}
+		
+		//測地系変換
+		public function w2j(w_lat:Number,w_lon:Number):Point
+		{
+			var w_point:Point = new Point(w_lon, w_lat);
+			var j_point:Point = AdapterUtil.w2j(w_point);	
+			return j_point;
+		}
+
+    	]]>
+    </mx:Script>
+
+</mx:Application>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute">
+<maps:Map xmlns:maps="com.google.maps.*" id="map" mapevent_mapready="onMapReady(event)" 
+  width="100%" height="100%" 
+  key="ABQIAAAAIf970F2DWNU4cOinEBwQsBQIAGf47rzcI_LJhcYasKKd7VX_TxQKW7Pyw8maKkLOZnPZkE36ecyZ9w"
+  />
+<mx:Script>
+    <![CDATA[
+   
+   		//基本
+	    import com.google.maps.LatLng;
+	    import com.google.maps.Map;
+	    import com.google.maps.MapType;
+	    
+	    //コントロール
+	    import com.google.maps.controls.MapTypeControl;
+	    import com.google.maps.controls.ZoomControl;
+	    import com.google.maps.controls.PositionControl;
+	    
+	    //イベント
+	    import com.google.maps.MapEvent;
+		import com.google.maps.MapMouseEvent;
+		
+		//ポリゴン、お知らせ窓
+		import com.google.maps.InfoWindowOptions;
+		import com.google.maps.overlays.Polygon;
+		import com.google.maps.overlays.PolygonOptions;
+		import com.google.maps.styles.FillStyle;
+		import com.google.maps.styles.StrokeStyle;
+		
+		//GeoHexを使うにはこれをimportしてね
+		import net.geogames.GeoHex;
+	
+		private var zone:GeoHex = new GeoHex();
+		private var h_stamp:Object = new Object();
+		
+	    private function onMapReady(event:Event):void 
+	    {
+	    	map.setCenter(new LatLng(35.68,139.74), 14, MapType.NORMAL_MAP_TYPE);
+			map.addControl(new ZoomControl());
+	  		map.addControl(new PositionControl());
+	  		map.addControl(new MapTypeControl());
+	  		
+	  		map.addEventListener(MapMouseEvent.CLICK, click);
+	    }
+	    
+	    public function click(e:MapMouseEvent):void
+		{
+			//zone.getZoneByLocation(e.latLng.lat(),e.latLng.lng(),7);
+			//drawHex(zone ,0xFF0000,0xFF8a00,1);
+			
+			/* 上と同じ*/
+			var center:Object = zone.latlng2center(e.latLng.lat(),e.latLng.lng(),7);
+			zone.lat   = center["lat"];
+			zone.lng   = center["lng"];
+			zone.level = center["level"];
+			zone.code  = center["code"];
+			
+			drawHex(zone ,0xFF0000,0xFF8a00,1);
+		}
+		
+		public function drawHex(l_zone:GeoHex,linecolor:uint,fillcolor:uint,popinfo:Object):void{
+
+			if(h_stamp[l_zone.code] != 1){
+
+				var polyArray:Array = zone.geohex2polygon(l_zone.code);
+				
+				var polygon:Polygon = new Polygon([
+		        	new LatLng(polyArray[0].y , polyArray[0].x),
+			        new LatLng(polyArray[1].y , polyArray[1].x),
+			        new LatLng(polyArray[2].y , polyArray[2].x),
+			        new LatLng(polyArray[3].y , polyArray[3].x),
+			        new LatLng(polyArray[4].y , polyArray[4].x),
+			        new LatLng(polyArray[5].y , polyArray[5].x),
+			        new LatLng(polyArray[6].y , polyArray[6].x)], 
+			     	
+			     	new PolygonOptions({ 
+			      	strokeStyle: new StrokeStyle({
+			        	color: linecolor,
+			          	thickness: 1,
+			          	alpha: 1}), 
+			          	fillStyle: new FillStyle({
+			          	color: fillcolor,
+			          	alpha: 0.1})})
+			      );
+				
+				  map.addOverlay(polygon); 
+		       
+		        
+		        if(popinfo){
+		            var myHtml:String = "<br />[ZONE] <a href='./?code="+l_zone.code+"'>"+l_zone.code+"</a>";
+		            
+		            polygon.addEventListener(MapMouseEvent.CLICK, function(e:MapMouseEvent):void {
+			        	map.openInfoWindow(new LatLng(l_zone.lat, l_zone.lng), new InfoWindowOptions({titleHTML: "", contentHTML: myHtml})); 
+			        });
+		        }
+		        
+		        h_stamp[l_zone.code]  = 1;
+		        
+		    }
+		}
+		
+    ]]>
+</mx:Script>
+</mx:Application>
